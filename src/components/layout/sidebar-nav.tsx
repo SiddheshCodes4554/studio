@@ -5,11 +5,12 @@ import {
   BookOpen,
   LayoutDashboard,
   LineChart,
+  LogOut,
   ShieldCheck,
   Users,
   GraduationCap
 } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from 'next/link';
 import { Logo } from "../icons/logo";
 import {
@@ -23,9 +24,15 @@ import {
 } from "../ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
 
 export function SidebarNav() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    router.push('/');
+  };
 
   const menuItems = [
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -99,6 +106,9 @@ export function SidebarNav() {
                 <p className="text-sm font-semibold truncate text-sidebar-accent-foreground">Alex Green</p>
                 <p className="text-xs text-sidebar-accent-foreground/70 truncate">Eco-Guardian</p>
             </div>
+            <Button variant="ghost" size="icon" className="shrink-0 text-sidebar-accent-foreground/70 hover:text-sidebar-accent-foreground hover:bg-sidebar-accent" onClick={handleLogout}>
+                <LogOut className="w-5 h-5"/>
+            </Button>
          </div>
       </SidebarFooter>
     </Sidebar>
