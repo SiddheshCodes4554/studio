@@ -6,8 +6,10 @@ import {
   LineChart,
   ShieldCheck,
   Users,
+  GraduationCap
 } from "lucide-react";
 import { usePathname } from "next/navigation";
+import Link from 'next/link';
 import { Logo } from "../icons/logo";
 import {
   Sidebar,
@@ -32,6 +34,10 @@ export function SidebarNav() {
     { href: "/impact", label: "My Impact", icon: LineChart },
   ];
 
+  const teacherMenuItems = [
+    { href: "/teacher/dashboard", label: "Teacher Dashboard", icon: GraduationCap },
+  ]
+
   return (
     <Sidebar className="border-r">
       <SidebarHeader>
@@ -49,20 +55,41 @@ export function SidebarNav() {
         <SidebarMenu>
           {menuItems.map((item) => (
             <SidebarMenuItem key={item.href}>
-              <SidebarMenuButton
-                href={item.href}
-                isActive={pathname === item.href}
-                asChild
-                className="h-10"
-              >
-                <a href={item.href}>
-                  <div className="flex items-center gap-2">
-                    <item.icon className="h-5 w-5" />
-                    <span>{item.label}</span>
-                  </div>
-                  {item.badge && <Badge className="ml-auto bg-accent text-accent-foreground">{item.badge}</Badge>}
-                </a>
-              </SidebarMenuButton>
+              <Link href={item.href} passHref>
+                <SidebarMenuButton
+                  isActive={pathname === item.href}
+                  asChild
+                  className="h-10"
+                >
+                  <a>
+                    <div className="flex items-center gap-2">
+                      <item.icon className="h-5 w-5" />
+                      <span>{item.label}</span>
+                    </div>
+                    {item.badge && <Badge className="ml-auto bg-accent text-accent-foreground">{item.badge}</Badge>}
+                  </a>
+                </SidebarMenuButton>
+              </Link>
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+         <SidebarMenu className="mt-auto">
+           {teacherMenuItems.map((item) => (
+            <SidebarMenuItem key={item.href}>
+              <Link href={item.href} passHref>
+                <SidebarMenuButton
+                  isActive={pathname === item.href}
+                  asChild
+                  className="h-10"
+                >
+                  <a>
+                    <div className="flex items-center gap-2">
+                      <item.icon className="h-5 w-5" />
+                      <span>{item.label}</span>
+                    </div>
+                  </a>
+                </SidebarMenuButton>
+              </Link>
             </SidebarMenuItem>
           ))}
         </SidebarMenu>

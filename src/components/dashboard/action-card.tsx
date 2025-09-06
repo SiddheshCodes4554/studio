@@ -58,7 +58,7 @@ export function ActionCard({
 
   return (
     <Card className={cn(
-      "flex flex-col group overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 border-2",
+      "flex flex-col group overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 border-2 h-full",
       variants.bg
     )}>
       <CardHeader>
@@ -91,7 +91,7 @@ export function ActionCard({
             <p className="text-center text-lg font-semibold text-primary/90">"12 classmates inspired"</p>
         )}
       </CardContent>
-      <div className="p-4 bg-white/40 dark:bg-black/10">
+      <div className="p-4 bg-white/40 dark:bg-black/10 mt-auto">
         <Button className={cn("w-full text-white", variants.button)}>
           {buttonText}
         </Button>

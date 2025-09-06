@@ -6,6 +6,7 @@ import { SocialFeed } from '@/components/dashboard/social-feed';
 import { Header } from '@/components/layout/header';
 import { SidebarNav } from '@/components/layout/sidebar-nav';
 import { SidebarProvider } from '@/components/ui/sidebar';
+import Link from 'next/link';
 
 export default function DashboardPage() {
   return (
@@ -24,27 +25,33 @@ export default function DashboardPage() {
           <CurrentQuest />
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <ActionCard
-              title="Learn"
-              description="Expand your knowledge with our interactive modules."
-              buttonText="Continue Learning"
-              iconName="BookOpen"
-              color="blue"
-            />
-            <ActionCard
-              title="Act"
-              description="Take on real-world challenges and make a difference."
-              buttonText="Start Mission"
-              iconName="ShieldCheck"
-              color="green"
-            />
-            <ActionCard
-              title="Inspire"
-              description="Share your progress and motivate your peers."
-              buttonText="Share Impact"
-              iconName="Megaphone"
-              color="orange"
-            />
+            <Link href="/learn">
+              <ActionCard
+                title="Learn"
+                description="Expand your knowledge with our interactive modules."
+                buttonText="Continue Learning"
+                iconName="BookOpen"
+                color="blue"
+              />
+            </Link>
+            <Link href="/challenges">
+              <ActionCard
+                title="Act"
+                description="Take on real-world challenges and make a difference."
+                buttonText="Start Mission"
+                iconName="ShieldCheck"
+                color="green"
+              />
+            </Link>
+            <Link href="/impact">
+              <ActionCard
+                title="Inspire"
+                description="Share your progress and motivate your peers."
+                buttonText="Share Impact"
+                iconName="Megaphone"
+                color="orange"
+              />
+            </Link>
           </div>
 
           <div className="grid gap-8 lg:grid-cols-5">
