@@ -7,47 +7,52 @@ import { Trophy } from 'lucide-react';
 
 const activeChallenges = [
   {
+    id: '30-day-recycling-streak',
     title: '30-Day Recycling Streak',
     description: 'Properly recycle your waste for 30 days straight to earn the Recycling Champion badge.',
     category: 'Waste Reduction',
     points: 100,
     progress: 20,
-    status: 'In Progress',
+    status: 'In Progress' as const,
   },
   {
+    id: 'community-garden-volunteer',
     title: 'Community Garden Volunteer',
     description: 'Spend 5 hours volunteering at a local community garden. Document your experience.',
     category: 'Community',
     points: 150,
     progress: 0,
-    status: 'Not Started',
+    status: 'Not Started' as const,
   },
   {
+    id: 'diy-compost-bin',
     title: 'DIY Compost Bin',
     description: 'Build your own compost bin at home from recycled materials. Submit a photo of your creation.',
     category: 'Composting',
     points: 200,
     progress: 0,
-    status: 'Not Started',
+    status: 'Not Started' as const,
   },
 ];
 
 const completedChallenges = [
     {
+      id: 'beach-cleanup',
       title: 'Beach Cleanup',
       description: 'Organized a successful beach cleanup event with 15 participants.',
       category: 'Community',
       points: 250,
       progress: 100,
-      status: 'Completed',
+      status: 'Completed' as const,
     },
     {
+      id: 'energy-saver',
       title: 'Energy Saver',
       description: 'Reduced household electricity consumption by 15% for a month.',
       category: 'Energy',
       points: 120,
       progress: 100,
-      status: 'Completed',
+      status: 'Completed' as const,
     },
 ];
 

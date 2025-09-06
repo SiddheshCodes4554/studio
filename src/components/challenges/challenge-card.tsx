@@ -6,8 +6,10 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
 import { CheckCircle, CircleDashed, Flame, Zap } from 'lucide-react';
+import Link from 'next/link';
 
 interface ChallengeCardProps {
+  id: string;
   title: string;
   description: string;
   category: string;
@@ -43,7 +45,7 @@ const statusConfig = {
     }
 }
 
-export function ChallengeCard({ title, description, category, points, progress, status }: ChallengeCardProps) {
+export function ChallengeCard({ id, title, description, category, points, progress, status }: ChallengeCardProps) {
     const config = statusConfig[status];
     const Icon = config.icon;
 
@@ -73,8 +75,10 @@ export function ChallengeCard({ title, description, category, points, progress, 
         <Progress value={progress} className={cn("h-2", config.progressBg)} />
       </CardContent>
       <CardFooter>
-        <Button variant={config.buttonVariant} className="w-full">
-          {config.buttonText}
+        <Button asChild variant={config.buttonVariant} className="w-full">
+          <Link href={`/challenges/${id}`}>
+            {config.buttonText}
+          </Link>
         </Button>
       </CardFooter>
     </Card>

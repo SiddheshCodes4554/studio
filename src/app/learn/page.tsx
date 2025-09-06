@@ -6,6 +6,7 @@ import { BookOpen } from 'lucide-react';
 
 const learningModules = [
   {
+    id: 'intro-to-climate-change',
     title: 'Introduction to Climate Change',
     category: 'Climate Science',
     progress: 100,
@@ -13,6 +14,7 @@ const learningModules = [
     dataAiHint: 'climate change',
   },
   {
+    id: 'sustainable-living',
     title: 'Sustainable Living Practices',
     category: 'Lifestyle',
     progress: 75,
@@ -20,6 +22,7 @@ const learningModules = [
     dataAiHint: 'sustainable living',
   },
   {
+    id: 'importance-of-biodiversity',
     title: 'The Importance of Biodiversity',
     category: 'Ecosystems',
     progress: 50,
@@ -27,6 +30,7 @@ const learningModules = [
     dataAiHint: 'biodiversity forest',
   },
   {
+    id: 'renewable-energy',
     title: 'Renewable Energy Sources',
     category: 'Energy',
     progress: 25,
@@ -34,6 +38,7 @@ const learningModules = [
     dataAiHint: 'solar panels',
   },
   {
+    id: 'waste-management',
     title: 'Waste Management and Recycling',
     category: 'Waste Reduction',
     progress: 0,
@@ -41,6 +46,7 @@ const learningModules = [
     dataAiHint: 'recycling plant',
   },
   {
+    id: 'water-conservation',
     title: 'Water Conservation Techniques',
     category: 'Water',
     progress: 0,
@@ -70,7 +76,7 @@ export default function LearnPage() {
 
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {learningModules.map((module) => (
-                    <LearningModuleCard key={module.title} {...module} />
+                    <LearningModuleCard key={module.id} {...module} />
                 ))}
             </div>
         </main>

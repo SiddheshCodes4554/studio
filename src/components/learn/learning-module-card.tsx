@@ -4,8 +4,10 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface LearningModuleCardProps {
+  id: string;
   title: string;
   category: string;
   progress: number;
@@ -13,22 +15,24 @@ interface LearningModuleCardProps {
   dataAiHint: string;
 }
 
-export function LearningModuleCard({ title, category, progress, imageUrl, dataAiHint }: LearningModuleCardProps) {
+export function LearningModuleCard({ id, title, category, progress, imageUrl, dataAiHint }: LearningModuleCardProps) {
   const isCompleted = progress === 100;
   const isInProgress = progress > 0 && progress < 100;
 
   return (
     <Card className="flex flex-col overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
       <CardHeader className="p-0 relative">
-        <Image 
-            src={imageUrl} 
-            alt={title}
-            width={600}
-            height={400}
-            data-ai-hint={dataAiHint} 
-            className="aspect-video object-cover" 
-        />
-        <Badge className="absolute top-3 right-3">{category}</Badge>
+        <Link href={`/learn/${id}`}>
+            <Image 
+                src={imageUrl} 
+                alt={title}
+                width={600}
+                height={400}
+                data-ai-hint={dataAiHint} 
+                className="aspect-video object-cover" 
+            />
+            <Badge className="absolute top-3 right-3">{category}</Badge>
+        </Link>
       </CardHeader>
       <CardContent className="flex-grow p-4 space-y-2">
         <h3 className="font-bold font-headline text-lg text-primary">{title}</h3>
@@ -41,8 +45,10 @@ export function LearningModuleCard({ title, category, progress, imageUrl, dataAi
         </div>
       </CardContent>
       <CardFooter className="p-4 bg-muted/50">
-        <Button className="w-full" variant={isCompleted ? "outline" : "default"}>
-            {isCompleted ? "Review Module" : isInProgress ? "Continue Learning" : "Start Learning"}
+        <Button asChild className="w-full" variant={isCompleted ? "outline" : "default"}>
+            <Link href={`/learn/${id}`}>
+                {isCompleted ? "Review Module" : isInProgress ? "Continue Learning" : "Start Learning"}
+            </Link>
         </Button>
       </CardFooter>
     </Card>
