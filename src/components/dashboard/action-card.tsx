@@ -6,11 +6,11 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import * as icons from "lucide-react";
+import { Progress } from "../ui/progress";
 
 type LucideIconName = keyof typeof icons;
 
@@ -19,66 +19,69 @@ interface ActionCardProps {
   description: string;
   buttonText: string;
   iconName: LucideIconName;
-  gradient: string;
+  color: "blue" | "green" | "orange";
 }
+
+const colorVariants = {
+  blue: {
+    bg: "bg-blue-500/10",
+    text: "text-blue-600",
+    progress: "bg-blue-500",
+    button: "bg-blue-600 hover:bg-blue-600/90",
+    iconBg: "bg-blue-100",
+  },
+  green: {
+    bg: "bg-green-500/10",
+    text: "text-green-600",
+    progress: "bg-green-500",
+    button: "bg-green-600 hover:bg-green-600/90",
+    iconBg: "bg-green-100",
+  },
+  orange: {
+    bg: "bg-orange-500/10",
+    text: "text-orange-600",
+    progress: "bg-orange-500",
+    button: "bg-orange-600 hover:bg-orange-600/90",
+    iconBg: "bg-orange-100",
+  },
+};
 
 export function ActionCard({
   title,
   description,
   buttonText,
   iconName,
-  gradient,
+  color,
 }: ActionCardProps) {
   const Icon = icons[iconName] as icons.LucideIcon;
+  const variants = colorVariants[color];
 
   return (
-    <Card className="flex flex-col group overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
-      <CardHeader
-        className={cn(
-          "bg-gradient-to-br p-6",
-          gradient
-        )}
-      >
+    <Card className={cn(
+      "flex flex-col group overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 border-2",
+      variants.bg
+    )}>
+      <CardHeader>
         <div className="flex justify-between items-start">
-          <div className="space-y-2">
-            <CardTitle className="font-headline text-2xl text-primary">
+          <div className="space-y-1">
+            <CardTitle className={cn("font-headline text-2xl", variants.text)}>
               {title}
             </CardTitle>
-            <CardDescription className="text-primary/80">
+            <CardDescription className={cn("text-sm", variants.text, "opacity-70")}>
               {description}
             </CardDescription>
           </div>
-          <div className="p-3 bg-white/50 rounded-lg">
-            <Icon className="w-8 h-8 text-primary" />
+          <div className={cn("p-3 rounded-lg", variants.iconBg)}>
+            <Icon className={cn("w-7 h-7", variants.text)} />
           </div>
         </div>
       </CardHeader>
-      <CardContent className="flex-grow p-6">
+      <CardContent className="flex-grow flex items-center justify-center p-6">
         {title === "Learn" && (
-            <div className="text-center">
-                <p className="font-semibold mb-2">Your Progress</p>
-                <div className="relative w-32 h-32 mx-auto">
-                    <svg className="w-full h-full" viewBox="0 0 36 36">
-                        <path
-                            className="text-muted"
-                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="3"
-                        />
-                        <path
-                            className="text-secondary"
-                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="3"
-                            strokeDasharray="60, 100"
-                        />
-                    </svg>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="text-xl font-bold text-primary">60%</span>
-                    </div>
-                </div>
+            <div className="w-full text-center space-y-2">
+                <p className="font-semibold text-primary/90">Module Progress</p>
+                <Progress value={60} className={cn("h-3 [&>div]:", variants.progress)} />
+                <p className="text-sm text-muted-foreground">6 of 10 modules completed</p>
             </div>
         )}
         {title === "Act" && (
@@ -88,11 +91,11 @@ export function ActionCard({
             <p className="text-center text-lg font-semibold text-primary/90">"12 classmates inspired"</p>
         )}
       </CardContent>
-      <CardFooter className="p-6">
-        <Button className="w-full bg-primary hover:bg-primary/90 group-hover:animate-pulse">
+      <div className="p-4 bg-white/40 dark:bg-black/10">
+        <Button className={cn("w-full text-white", variants.button)}>
           {buttonText}
         </Button>
-      </CardFooter>
+      </div>
     </Card>
   );
 }
