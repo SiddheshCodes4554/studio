@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -62,13 +61,13 @@ export function SidebarNav() {
                   asChild
                   className="h-10"
                 >
-                  <a>
+                  <div className="flex items-center justify-between w-full">
                     <div className="flex items-center gap-2">
                       <item.icon className="h-5 w-5" />
                       <span>{item.label}</span>
                     </div>
                     {item.badge && <Badge className="ml-auto bg-accent text-accent-foreground">{item.badge}</Badge>}
-                  </a>
+                  </div>
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>
@@ -83,12 +82,10 @@ export function SidebarNav() {
                   asChild
                   className="h-10"
                 >
-                  <a>
-                    <div className="flex items-center gap-2">
-                      <item.icon className="h-5 w-5" />
-                      <span>{item.label}</span>
-                    </div>
-                  </a>
+                  <div className="flex items-center gap-2">
+                    <item.icon className="h-5 w-5" />
+                    <span>{item.label}</span>
+                  </div>
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>
