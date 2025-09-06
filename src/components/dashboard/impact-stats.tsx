@@ -12,6 +12,7 @@ import {
   ChartLegendContent,
 } from "@/components/ui/chart"
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
+import { cn } from "@/lib/utils";
 
 function AnimatedCounter({ value }: { value: number }) {
     const [count, setCount] = useState(0);
