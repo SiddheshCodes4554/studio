@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -27,7 +28,7 @@ export function SidebarNav() {
   const pathname = usePathname();
 
   const menuItems = [
-    { href: "/", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
     { href: "/learn", label: "Learning", icon: BookOpen },
     { href: "/challenges", label: "Challenges", icon: ShieldCheck, badge: "3" },
     { href: "/teams", label: "Teams", icon: Users },
@@ -41,7 +42,7 @@ export function SidebarNav() {
   return (
     <Sidebar className="border-r">
       <SidebarHeader>
-        <div className="flex items-center gap-2.5">
+        <Link href="/dashboard" className="flex items-center gap-2.5">
           <Logo className="w-9 h-9 text-sidebar-primary" />
           <div className="flex flex-col">
           <span className="text-lg font-headline font-semibold text-sidebar-primary">
@@ -49,7 +50,7 @@ export function SidebarNav() {
           </span>
           <span className="text-xs text-sidebar-primary/70 -mt-1">Digital Forest Academy</span>
           </div>
-        </div>
+        </Link>
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
@@ -58,16 +59,13 @@ export function SidebarNav() {
               <Link href={item.href} passHref>
                 <SidebarMenuButton
                   isActive={pathname === item.href}
-                  asChild
                   className="h-10"
                 >
-                  <div className="flex items-center justify-between w-full">
                     <div className="flex items-center gap-2">
                       <item.icon className="h-5 w-5" />
                       <span>{item.label}</span>
                     </div>
                     {item.badge && <Badge className="ml-auto bg-accent text-accent-foreground">{item.badge}</Badge>}
-                  </div>
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>
@@ -79,7 +77,6 @@ export function SidebarNav() {
               <Link href={item.href} passHref>
                 <SidebarMenuButton
                   isActive={pathname === item.href}
-                  asChild
                   className="h-10"
                 >
                   <div className="flex items-center gap-2">

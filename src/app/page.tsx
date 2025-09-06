@@ -1,71 +1,54 @@
-import { ActionCard } from '@/components/dashboard/action-card';
-import { CurrentQuest } from '@/components/dashboard/current-quest';
-import { ImpactStats } from '@/components/dashboard/impact-stats';
-import { LearningPathGenerator } from '@/components/dashboard/learning-path-generator';
-import { SocialFeed } from '@/components/dashboard/social-feed';
-import { Header } from '@/components/layout/header';
-import { SidebarNav } from '@/components/layout/sidebar-nav';
-import { SidebarProvider } from '@/components/ui/sidebar';
+
+'use client';
+
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Logo } from '@/components/icons/logo';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-export default function DashboardPage() {
+export default function LoginPage() {
+  const router = useRouter();
+
+  const handleLogin = () => {
+    // In a real app, you'd have authentication logic here.
+    // For this prototype, we'll just navigate to the dashboard.
+    router.push('/dashboard');
+  };
+
   return (
-    <SidebarProvider>
-      <SidebarNav />
-      <div className="flex-1 bg-grid">
-        <Header />
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 space-y-8">
-          <div className="flex justify-between items-start">
-            <div>
-              <h1 className="text-3xl font-headline font-bold text-primary">Welcome, Eco-Guardian!</h1>
-              <p className="text-muted-foreground mt-1">Let's continue our journey to protect the planet.</p>
+    <div className="flex items-center justify-center min-h-screen bg-grid p-4">
+      <div className="absolute inset-0 bg-gradient-to-br from-green-100/80 via-teal-50/80 to-blue-100/80 dark:from-green-900/50 dark:via-teal-900/30 dark:to-blue-900/50 -z-10" />
+      
+      <Card className="w-full max-w-md shadow-2xl border-2 border-primary/10">
+        <CardHeader className="text-center">
+            <div className="mx-auto mb-4">
+                <Logo className="w-16 h-16 text-primary" />
             </div>
-          </div>
-
-          <CurrentQuest />
-
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            <Link href="/learn">
-              <ActionCard
-                title="Learn"
-                description="Expand your knowledge with our interactive modules."
-                buttonText="Continue Learning"
-                iconName="BookOpen"
-                color="blue"
-              />
-            </Link>
-            <Link href="/challenges">
-              <ActionCard
-                title="Act"
-                description="Take on real-world challenges and make a difference."
-                buttonText="Start Mission"
-                iconName="ShieldCheck"
-                color="green"
-              />
-            </Link>
-            <Link href="/impact">
-              <ActionCard
-                title="Inspire"
-                description="Share your progress and motivate your peers."
-                buttonText="Share Impact"
-                iconName="Megaphone"
-                color="orange"
-              />
-            </Link>
-          </div>
-
-          <div className="grid gap-8 lg:grid-cols-5">
-            <div className="lg:col-span-3">
-              <ImpactStats />
+          <CardTitle className="text-3xl font-headline text-primary">Welcome to GreenLeap</CardTitle>
+          <CardDescription className="text-lg">Your Digital Forest Academy</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input id="email" type="email" placeholder="student@greenleap.edu" required />
             </div>
-            <div className="lg:col-span-2">
-              <SocialFeed />
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input id="password" type="password" required />
             </div>
-          </div>
-
-          <LearningPathGenerator />
-        </main>
-      </div>
-    </SidebarProvider>
+            <Button type="submit" className="w-full" size="lg">
+              Login
+            </Button>
+            <div className="text-center text-sm text-muted-foreground">
+                <p>Are you a teacher? <Link href="/teacher/dashboard" className="font-semibold text-primary hover:underline">Go to Teacher Dashboard</Link></p>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
