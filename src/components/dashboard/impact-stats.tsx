@@ -14,6 +14,7 @@ import {
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
 import { cn } from "@/lib/utils";
 
+
 function AnimatedCounter({ value }: { value: number }) {
     const [count, setCount] = useState(0);
   
@@ -98,7 +99,7 @@ export function ImpactStats() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {stats.map((stat) => (
             <div key={stat.name} className={cn("p-4 rounded-lg flex items-center gap-4", stat.bgColor)}>
-              <div className={cn("p-3 rounded-full bg-white/80 dark:bg-black/20", stat.color)}>
+              <div className={cn("p-3 rounded-full bg-background/80", stat.color)}>
                 <stat.icon className="w-6 h-6" />
               </div>
               <div>

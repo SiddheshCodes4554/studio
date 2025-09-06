@@ -36,7 +36,7 @@ export function CurrentQuest() {
         <div className="flex-shrink-0 flex flex-col items-center gap-4 p-6 rounded-2xl bg-white/50 dark:bg-black/20">
             <div className="relative">
                 <Star className="w-24 h-24 text-accent" fill="currentColor" />
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-white">
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-accent-foreground">
                     <span className="font-bold text-xl leading-none">Eco</span>
                     <span className="text-xs font-medium">Guardian</span>
                 </div>
