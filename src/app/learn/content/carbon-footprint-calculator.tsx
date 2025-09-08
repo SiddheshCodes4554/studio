@@ -25,10 +25,14 @@ const ENERGY_EMISSION_FACTOR = 0.4; // kg CO2e per kWh
 // Food: Average diet (Our World in Data).
 const FOOD_EMISSION_FACTOR = 2.5; // kg CO2e per dollar (highly variable)
 
+interface CarbonFootprintCalculatorProps {
+  onComplete: () => void;
+}
 
-export function CarbonFootprintCalculator() {
+export function CarbonFootprintCalculator({ onComplete }: CarbonFootprintCalculatorProps) {
     const [formData, setFormData] = useState(initialFormState);
     const [result, setResult] = useState<any[] | null>(null);
+    const [isCalculated, setIsCalculated] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -51,6 +55,7 @@ export function CarbonFootprintCalculator() {
             { name: 'Energy', value: parseFloat(energyEmissions.toFixed(2)) },
             { name: 'Food', value: parseFloat(foodEmissions.toFixed(2)) },
         ]);
+        setIsCalculated(true);
     };
 
     return (
@@ -102,6 +107,11 @@ export function CarbonFootprintCalculator() {
                         )}
                     </div>
                 </div>
+                 {isCalculated && (
+                    <div className="mt-6 text-center">
+                        <Button onClick={onComplete}>Continue to Next Section</Button>
+                    </div>
+                )}
             </CardContent>
         </Card>
     )

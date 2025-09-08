@@ -15,7 +15,7 @@ type ModuleContentProps = {
 };
 
 const activityComponents: { [key: string]: React.ComponentType<{ onComplete: () => void }> } = {
-  'CarbonFootprintCalculator': ({ onComplete }) => <CarbonFootprintCalculator />, // Note: This activity doesn't have an explicit complete button, it's self-contained.
+  'CarbonFootprintCalculator': CarbonFootprintCalculator,
   'WasteSortingGame': WasteSortingGame,
 };
 
