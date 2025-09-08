@@ -17,6 +17,15 @@ const initialFormState = {
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28'];
 
+// Emission factors (approximations for educational purposes)
+// Transport: Average gasoline car (EPA).
+const TRANSPORT_EMISSION_FACTOR = 0.21; // kg CO2e per km
+// Energy: Average US electricity grid (EPA).
+const ENERGY_EMISSION_FACTOR = 0.4; // kg CO2e per kWh
+// Food: Average diet (Our World in Data).
+const FOOD_EMISSION_FACTOR = 2.5; // kg CO2e per dollar (highly variable)
+
+
 export function CarbonFootprintCalculator() {
     const [formData, setFormData] = useState(initialFormState);
     const [result, setResult] = useState<any[] | null>(null);
@@ -31,9 +40,9 @@ export function CarbonFootprintCalculator() {
 
     const calculateFootprint = (e: React.FormEvent) => {
         e.preventDefault();
-        const transportEmissions = parseFloat(formData.transport || '0') * 0.21; // kg CO2 per km for avg car
-        const energyEmissions = parseFloat(formData.energy || '0') * 0.82; // kg CO2 per kWh for avg US grid
-        const foodEmissions = parseFloat(formData.food || '0') * 2.5; // kg CO2 per dollar spent on food (very rough estimate)
+        const transportEmissions = parseFloat(formData.transport || '0') * TRANSPORT_EMISSION_FACTOR;
+        const energyEmissions = parseFloat(formData.energy || '0') * ENERGY_EMISSION_FACTOR;
+        const foodEmissions = parseFloat(formData.food || '0') * FOOD_EMISSION_FACTOR;
 
         const total = transportEmissions + energyEmissions + foodEmissions;
 
@@ -57,11 +66,11 @@ export function CarbonFootprintCalculator() {
                 <div className="grid md:grid-cols-2 gap-8 items-center">
                     <form onSubmit={calculateFootprint} className="space-y-4">
                         <div>
-                            <Label htmlFor="transport">Monthly Travel (in km)</Label>
+                            <Label htmlFor="transport">Monthly Travel by Car (in km)</Label>
                             <Input id="transport" name="transport" type="number" value={formData.transport} onChange={handleChange} placeholder="e.g., 500" required />
                         </div>
                         <div>
-                            <Label htmlFor="energy">Monthly Electricity (in kWh)</Label>
+                            <Label htmlFor="energy">Monthly Household Electricity (in kWh)</Label>
                             <Input id="energy" name="energy" type="number" value={formData.energy} onChange={handleChange} placeholder="e.g., 300" required />
                         </div>
                         <div>

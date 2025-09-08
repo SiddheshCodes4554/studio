@@ -64,7 +64,7 @@ export function ModuleContent({ module }: ModuleContentProps) {
                     React.createElement(activityComponents[item.content])
                 )}
 
-                {item.type === 'quiz' && (
+                {item.type === 'quiz' && Array.isArray(item.content) && (
                     <Quiz questions={item.content} onComplete={() => handleComplete(item.title)} />
                 )}
 
