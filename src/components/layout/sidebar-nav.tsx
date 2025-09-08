@@ -50,7 +50,6 @@ export function SidebarNav() {
   ];
 
   const itemsToRender = isTeacherView ? teacherMenuItems : menuItems;
-  const showTeacherLinkInFooter = !isTeacherView;
 
   return (
     <Sidebar className="border-r">
@@ -84,26 +83,6 @@ export function SidebarNav() {
             </SidebarMenuItem>
           ))}
         </SidebarMenu>
-         {showTeacherLinkInFooter && (
-            <SidebarMenu className="mt-auto">
-              {teacherMenuItems.map((item) => (
-                <SidebarMenuItem key={item.href}>
-                  <Link href={item.href} passHref>
-                    <SidebarMenuButton
-                      isActive={pathname === item.href}
-                      className="h-10"
-                      variant="outline"
-                    >
-                      <div className="flex items-center gap-2">
-                        <item.icon className="h-5 w-5" />
-                        <span>{item.label}</span>
-                      </div>
-                    </SidebarMenuButton>
-                  </Link>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-         )}
       </SidebarContent>
       <SidebarFooter>
          <div className="flex items-center gap-3 p-2 rounded-lg bg-sidebar-accent">
