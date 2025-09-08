@@ -2,58 +2,8 @@ import { LearningModuleCard } from '@/components/learn/learning-module-card';
 import { Header } from '@/components/layout/header';
 import { SidebarNav } from '@/components/layout/sidebar-nav';
 import { SidebarProvider } from '@/components/ui/sidebar';
+import { learningModules } from '@/lib/modules-data';
 import { BookOpen } from 'lucide-react';
-
-const learningModules = [
-  {
-    id: 'intro-to-climate-change',
-    title: 'Introduction to Climate Change',
-    category: 'Climate Science',
-    progress: 100,
-    imageUrl: 'https://picsum.photos/600/400?random=10',
-    dataAiHint: 'climate change',
-  },
-  {
-    id: 'sustainable-living',
-    title: 'Sustainable Living Practices',
-    category: 'Lifestyle',
-    progress: 75,
-    imageUrl: 'https://picsum.photos/600/400?random=11',
-    dataAiHint: 'sustainable living',
-  },
-  {
-    id: 'importance-of-biodiversity',
-    title: 'The Importance of Biodiversity',
-    category: 'Ecosystems',
-    progress: 50,
-    imageUrl: 'https://picsum.photos/600/400?random=12',
-    dataAiHint: 'biodiversity forest',
-  },
-  {
-    id: 'renewable-energy',
-    title: 'Renewable Energy Sources',
-    category: 'Energy',
-    progress: 25,
-    imageUrl: 'https://picsum.photos/600/400?random=13',
-    dataAiHint: 'solar panels',
-  },
-  {
-    id: 'waste-management',
-    title: 'Waste Management and Recycling',
-    category: 'Waste Reduction',
-    progress: 0,
-    imageUrl: 'https://picsum.photos/600/400?random=14',
-    dataAiHint: 'recycling plant',
-  },
-  {
-    id: 'water-conservation',
-    title: 'Water Conservation Techniques',
-    category: 'Water',
-    progress: 0,
-    imageUrl: 'https://picsum.photos/600/400?random=15',
-    dataAiHint: 'water conservation',
-  },
-];
 
 export default function LearnPage() {
   return (
