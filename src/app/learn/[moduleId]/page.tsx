@@ -14,24 +14,32 @@ import { useState } from 'react';
 
 export default function ModuleDetailPage({ params }: { params: { moduleId: string } }) {
   const router = useRouter();
+  // Find the module, but create a local copy of its progress to avoid direct mutation issues
+  // in some strict React environments. The source data will be updated directly in handleModuleComplete.
   const moduleDetails = learningModules.find(m => m.id === params.moduleId);
-  const [isCompleted, setIsCompleted] = useState(moduleDetails?.progress === 100);
 
   if (!moduleDetails) {
     notFound();
   }
+  
+  const [isCompleted, setIsCompleted] = useState(moduleDetails.progress === 100);
 
   const handleModuleComplete = () => {
     // In a real app, you'd update the backend here.
-    // For now, we'll just update the client state and redirect.
+    // For this prototype, we find the module in our "database" (the imported array)
+    // and mutate its progress directly. This change will be reflected on the /learn page
+    // because the same array instance is used.
+    const moduleToUpdate = learningModules.find(m => m.id === params.moduleId);
+    if (moduleToUpdate) {
+      moduleToUpdate.progress = 100;
+    }
+    
     setIsCompleted(true);
-    // This is a proxy for updating the progress. A real app would refetch.
-    const completedModule = learningModules.find(m => m.id === params.moduleId);
-    if(completedModule) completedModule.progress = 100;
-
+    
+    // Redirect back to the main learning page after a short delay
     setTimeout(() => {
         router.push('/learn');
-    }, 500)
+    }, 500);
   };
 
 
