@@ -1,21 +1,39 @@
 
+'use client';
+
 import { Header } from '@/components/layout/header';
 import { SidebarNav } from '@/components/layout/sidebar-nav';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { SidebarProvider } from '@/components/ui/sidebar';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Star } from 'lucide-react';
 import Image from 'next/image';
 import { learningModules } from '@/lib/modules-data';
 import { ModuleContent } from '@/app/learn/content/module-content';
-import { notFound } from 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export default function ModuleDetailPage({ params }: { params: { moduleId: string } }) {
+  const router = useRouter();
   const moduleDetails = learningModules.find(m => m.id === params.moduleId);
+  const [isCompleted, setIsCompleted] = useState(moduleDetails?.progress === 100);
 
   if (!moduleDetails) {
     notFound();
   }
+
+  const handleModuleComplete = () => {
+    // In a real app, you'd update the backend here.
+    // For now, we'll just update the client state and redirect.
+    setIsCompleted(true);
+    // This is a proxy for updating the progress. A real app would refetch.
+    const completedModule = learningModules.find(m => m.id === params.moduleId);
+    if(completedModule) completedModule.progress = 100;
+
+    setTimeout(() => {
+        router.push('/learn');
+    }, 500)
+  };
+
 
   return (
     <SidebarProvider>
@@ -41,14 +59,9 @@ export default function ModuleDetailPage({ params }: { params: { moduleId: strin
                             </div>
                         </CardHeader>
                         <CardContent className="p-6 md:p-8">
-                           <ModuleContent module={moduleDetails} />
+                           <ModuleContent module={moduleDetails} onModuleComplete={handleModuleComplete} isModuleCompleted={isCompleted} />
                         </CardContent>
                     </Card>
-                    <div className="mt-8 text-center">
-                        <Button size="lg" className="bg-success hover:bg-success/90">
-                           <Star className="mr-2 h-5 w-5"/> Mark Module as Complete
-                        </Button>
-                    </div>
                 </div>
             </main>
         </div>

@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
-import { CheckCircle, Lock, PlayCircle } from 'lucide-react';
+import { CheckCircle, Lock, PlayCircle, Award } from 'lucide-react';
 import { type LearningModule } from '@/lib/modules-data';
 import { Quiz } from './quiz';
 import { CarbonFootprintCalculator } from './carbon-footprint-calculator';
@@ -12,6 +12,8 @@ import { WasteSortingGame } from './waste-sorting-game';
 
 type ModuleContentProps = {
   module: LearningModule;
+  onModuleComplete: () => void;
+  isModuleCompleted: boolean;
 };
 
 const activityComponents: { [key: string]: React.ComponentType<{ onComplete: () => void }> } = {
@@ -19,9 +21,11 @@ const activityComponents: { [key: string]: React.ComponentType<{ onComplete: () 
   'WasteSortingGame': WasteSortingGame,
 };
 
-export function ModuleContent({ module }: ModuleContentProps) {
-  const [completedItems, setCompletedItems] = useState<string[]>([]);
+export function ModuleContent({ module, onModuleComplete, isModuleCompleted }: ModuleContentProps) {
+  const [completedItems, setCompletedItems] = useState<string[]>(isModuleCompleted ? module.content.map(c => c.title) : []);
   const [activeItem, setActiveItem] = useState(module.content[0]?.title || '');
+
+  const allItemsCompleted = completedItems.length === module.content.length;
 
   const handleComplete = (title: string) => {
     if (!completedItems.includes(title)) {
@@ -37,7 +41,7 @@ export function ModuleContent({ module }: ModuleContentProps) {
   };
   
   const isItemLocked = (index: number): boolean => {
-    if (index === 0) return false;
+    if (index === 0 || isModuleCompleted) return false;
     const prevItem = module.content[index - 1];
     return !completedItems.includes(prevItem.title);
   }
@@ -82,6 +86,17 @@ export function ModuleContent({ module }: ModuleContentProps) {
           );
         })}
       </Accordion>
+      
+      {(allItemsCompleted || isModuleCompleted) && (
+        <div className="mt-8 text-center p-6 bg-success/10 rounded-lg">
+            <Award className="w-16 h-16 text-success mx-auto mb-4 animate-pulse" />
+            <h3 className="text-2xl font-bold text-success">Module Complete!</h3>
+            <p className="text-success/80 mb-6">You've mastered the material. Well done!</p>
+            <Button size="lg" className="bg-success hover:bg-success/90" onClick={onModuleComplete}>
+                Back to Learning Modules
+            </Button>
+        </div>
+      )}
     </div>
   );
 }
