@@ -9,6 +9,7 @@ import { type LearningModule } from '@/lib/modules-data';
 import { Quiz } from './quiz';
 import { CarbonFootprintCalculator } from './carbon-footprint-calculator';
 import { WasteSortingGame } from './waste-sorting-game';
+import { useRouter } from 'next/navigation';
 
 type ModuleContentProps = {
   module: LearningModule;
@@ -22,10 +23,11 @@ const activityComponents: { [key: string]: React.ComponentType<{ onComplete: () 
 };
 
 export function ModuleContent({ module, onModuleComplete, isModuleCompleted }: ModuleContentProps) {
+  const router = useRouter();
   const [completedItems, setCompletedItems] = useState<string[]>(isModuleCompleted ? module.content.map(c => c.title) : []);
   const [activeItem, setActiveItem] = useState(module.content[0]?.title || '');
 
-  const allItemsCompleted = completedItems.length === module.content.length;
+  const allItemsNewlyCompleted = completedItems.length === module.content.length && !isModuleCompleted;
 
   const handleComplete = (title: string) => {
     if (!completedItems.includes(title)) {
@@ -87,12 +89,20 @@ export function ModuleContent({ module, onModuleComplete, isModuleCompleted }: M
         })}
       </Accordion>
       
-      {(allItemsCompleted || isModuleCompleted) && (
+      {allItemsNewlyCompleted && (
         <div className="mt-8 text-center p-6 bg-success/10 rounded-lg">
             <Award className="w-16 h-16 text-success mx-auto mb-4 animate-pulse" />
             <h3 className="text-2xl font-bold text-success">Module Complete!</h3>
             <p className="text-success/80 mb-6">You've mastered the material. Well done!</p>
             <Button size="lg" className="bg-success hover:bg-success/90" onClick={onModuleComplete}>
+                Finish Module & Go Back
+            </Button>
+        </div>
+      )}
+
+      {isModuleCompleted && !allItemsNewlyCompleted && (
+         <div className="mt-8 text-center">
+            <Button size="lg" variant="outline" onClick={() => router.push('/learn')}>
                 Back to Learning Modules
             </Button>
         </div>
