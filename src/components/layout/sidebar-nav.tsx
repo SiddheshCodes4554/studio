@@ -31,8 +31,11 @@ export function SidebarNav() {
   const router = useRouter();
 
   const handleLogout = () => {
-    router.push('/');
+    const target = isTeacherView ? '/' : '/';
+    router.push(target);
   };
+
+  const isTeacherView = pathname.startsWith('/teacher');
 
   const menuItems = [
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -44,7 +47,10 @@ export function SidebarNav() {
 
   const teacherMenuItems = [
     { href: "/teacher/dashboard", label: "Teacher Dashboard", icon: GraduationCap },
-  ]
+  ];
+
+  const itemsToRender = isTeacherView ? teacherMenuItems : menuItems;
+  const showTeacherLinkInFooter = !isTeacherView;
 
   return (
     <Sidebar className="border-r">
@@ -61,7 +67,7 @@ export function SidebarNav() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
-          {menuItems.map((item) => (
+          {itemsToRender.map((item) => (
             <SidebarMenuItem key={item.href}>
               <Link href={item.href} passHref>
                 <SidebarMenuButton
@@ -78,33 +84,36 @@ export function SidebarNav() {
             </SidebarMenuItem>
           ))}
         </SidebarMenu>
-         <SidebarMenu className="mt-auto">
-           {teacherMenuItems.map((item) => (
-            <SidebarMenuItem key={item.href}>
-              <Link href={item.href} passHref>
-                <SidebarMenuButton
-                  isActive={pathname === item.href}
-                  className="h-10"
-                >
-                  <div className="flex items-center gap-2">
-                    <item.icon className="h-5 w-5" />
-                    <span>{item.label}</span>
-                  </div>
-                </SidebarMenuButton>
-              </Link>
-            </SidebarMenuItem>
-          ))}
-        </SidebarMenu>
+         {showTeacherLinkInFooter && (
+            <SidebarMenu className="mt-auto">
+              {teacherMenuItems.map((item) => (
+                <SidebarMenuItem key={item.href}>
+                  <Link href={item.href} passHref>
+                    <SidebarMenuButton
+                      isActive={pathname === item.href}
+                      className="h-10"
+                      variant="outline"
+                    >
+                      <div className="flex items-center gap-2">
+                        <item.icon className="h-5 w-5" />
+                        <span>{item.label}</span>
+                      </div>
+                    </SidebarMenuButton>
+                  </Link>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+         )}
       </SidebarContent>
       <SidebarFooter>
          <div className="flex items-center gap-3 p-2 rounded-lg bg-sidebar-accent">
             <Avatar className="h-10 w-10 border-2 border-sidebar-border">
-              <AvatarImage src="https://i.pravatar.cc/150?u=a042581f4e29026704a" alt="User" />
-              <AvatarFallback>AG</AvatarFallback>
+              <AvatarImage src={isTeacherView ? "https://i.pravatar.cc/150?u=teacher" : "https://i.pravatar.cc/150?u=a042581f4e29026704a"} alt="User" />
+              <AvatarFallback>{isTeacherView ? 'T' : 'AG'}</AvatarFallback>
             </Avatar>
             <div className="flex-1 overflow-hidden">
-                <p className="text-sm font-semibold truncate text-sidebar-accent-foreground">Alex Green</p>
-                <p className="text-xs text-sidebar-accent-foreground/70 truncate">Eco-Guardian</p>
+                <p className="text-sm font-semibold truncate text-sidebar-accent-foreground">{isTeacherView ? 'Educator' : 'Alex Green'}</p>
+                <p className="text-xs text-sidebar-accent-foreground/70 truncate">{isTeacherView ? 'Teacher' : 'Eco-Guardian'}</p>
             </div>
             <Button variant="ghost" size="icon" className="shrink-0 text-sidebar-accent-foreground/70 hover:text-sidebar-accent-foreground hover:bg-sidebar-accent" onClick={handleLogout}>
                 <LogOut className="w-5 h-5"/>
