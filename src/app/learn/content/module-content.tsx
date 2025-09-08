@@ -8,13 +8,15 @@ import { CheckCircle, Lock, PlayCircle } from 'lucide-react';
 import { type LearningModule } from '@/lib/modules-data';
 import { Quiz } from './quiz';
 import { CarbonFootprintCalculator } from './carbon-footprint-calculator';
+import { WasteSortingGame } from './waste-sorting-game';
 
 type ModuleContentProps = {
   module: LearningModule;
 };
 
-const activityComponents: { [key: string]: React.ComponentType } = {
-  'CarbonFootprintCalculator': CarbonFootprintCalculator,
+const activityComponents: { [key: string]: React.ComponentType<{ onComplete: () => void }> } = {
+  'CarbonFootprintCalculator': ({ onComplete }) => <CarbonFootprintCalculator />, // Note: This activity doesn't have an explicit complete button, it's self-contained.
+  'WasteSortingGame': WasteSortingGame,
 };
 
 export function ModuleContent({ module }: ModuleContentProps) {
@@ -58,21 +60,23 @@ export function ModuleContent({ module }: ModuleContentProps) {
                 </div>
               </AccordionTrigger>
               <AccordionContent className="prose dark:prose-invert max-w-none p-4 border-l-4 border-primary/20 ml-5">
-                {item.type === 'reading' && <div dangerouslySetInnerHTML={{ __html: item.content as string }} />}
+                {item.type === 'reading' && (
+                    <>
+                        <div dangerouslySetInnerHTML={{ __html: item.content as string }} />
+                        <Button onClick={() => handleComplete(item.title)} className="mt-6" disabled={isCompleted}>
+                            {isCompleted ? 'Completed' : 'Mark as Complete'}
+                        </Button>
+                    </>
+                )}
                 
                 {item.type === 'activity' && typeof item.content === 'string' && activityComponents[item.content] && (
-                    React.createElement(activityComponents[item.content])
+                    React.createElement(activityComponents[item.content], { onComplete: () => handleComplete(item.title) })
                 )}
 
                 {item.type === 'quiz' && Array.isArray(item.content) && (
                     <Quiz questions={item.content} onComplete={() => handleComplete(item.title)} />
                 )}
 
-                {item.type !== 'quiz' && (
-                    <Button onClick={() => handleComplete(item.title)} className="mt-6" disabled={isCompleted}>
-                        {isCompleted ? 'Completed' : 'Mark as Complete'}
-                    </Button>
-                )}
               </AccordionContent>
             </AccordionItem>
           );

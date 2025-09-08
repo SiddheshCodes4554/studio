@@ -1,5 +1,6 @@
 
 import { introToClimateChange } from "@/app/learn/content/climate-change-data";
+import { wasteManagementContent } from "@/app/learn/content/waste-management-data";
 
 export type ModuleContentItem = {
     type: 'reading' | 'activity' | 'quiz';
@@ -32,6 +33,16 @@ export const learningModules: LearningModule[] = [
     content: introToClimateChange
   },
   {
+    id: 'waste-management',
+    title: 'Waste Management and Recycling',
+    category: 'Waste Reduction',
+    description: 'Understand the lifecycle of waste and the importance of the 3 Rs: Reduce, Reuse, Recycle.',
+    progress: 0,
+    imageUrl: 'https://picsum.photos/600/400?random=14',
+    dataAiHint: 'recycling plant',
+    content: wasteManagementContent
+  },
+  {
     id: 'sustainable-living',
     title: 'Sustainable Living Practices',
     category: 'Lifestyle',
@@ -59,16 +70,6 @@ export const learningModules: LearningModule[] = [
     progress: 0,
     imageUrl: 'https://picsum.photos/600/400?random=13',
     dataAiHint: 'solar panels',
-    content: []
-  },
-  {
-    id: 'waste-management',
-    title: 'Waste Management and Recycling',
-    category: 'Waste Reduction',
-    description: 'Understand the lifecycle of waste and the importance of the 3 Rs: Reduce, Reuse, Recycle.',
-    progress: 0,
-    imageUrl: 'https://picsum.photos/600/400?random=14',
-    dataAiHint: 'recycling plant',
     content: []
   },
   {
