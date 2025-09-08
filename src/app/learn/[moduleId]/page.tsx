@@ -12,11 +12,11 @@ import { ModuleContent } from '@/app/learn/content/module-content';
 import { notFound, useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-export default function ModuleDetailPage({ params }: { params: { moduleId: string } }) {
+export default function ModuleDetailPage({ params: { moduleId } }: { params: { moduleId: string } }) {
   const router = useRouter();
   // Find the module, but create a local copy of its progress to avoid direct mutation issues
   // in some strict React environments. The source data will be updated directly in handleModuleComplete.
-  const moduleDetails = learningModules.find(m => m.id === params.moduleId);
+  const moduleDetails = learningModules.find(m => m.id === moduleId);
 
   if (!moduleDetails) {
     notFound();
@@ -29,7 +29,7 @@ export default function ModuleDetailPage({ params }: { params: { moduleId: strin
     // For this prototype, we find the module in our "database" (the imported array)
     // and mutate its progress directly. This change will be reflected on the /learn page
     // because the same array instance is used.
-    const moduleToUpdate = learningModules.find(m => m.id === params.moduleId);
+    const moduleToUpdate = learningModules.find(m => m.id === moduleId);
     if (moduleToUpdate) {
       moduleToUpdate.progress = 100;
     }
