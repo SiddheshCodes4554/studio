@@ -10,10 +10,11 @@ import Image from 'next/image';
 import { learningModules } from '@/lib/modules-data';
 import { ModuleContent } from '@/app/learn/content/module-content';
 import { notFound, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, use } from 'react';
 
-export default function ModuleDetailPage({ params: { moduleId } }: { params: { moduleId: string } }) {
+export default function ModuleDetailPage({ params }: { params: { moduleId: string } }) {
   const router = useRouter();
+  const { moduleId } = use(params);
   // Find the module, but create a local copy of its progress to avoid direct mutation issues
   // in some strict React environments. The source data will be updated directly in handleModuleComplete.
   const moduleDetails = learningModules.find(m => m.id === moduleId);
