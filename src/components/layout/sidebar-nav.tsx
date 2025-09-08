@@ -31,7 +31,7 @@ export function SidebarNav() {
   const router = useRouter();
 
   const handleLogout = () => {
-    const target = isTeacherView ? '/' : '/';
+    const target = isTeacherView ? '/teacher/login' : '/';
     router.push(target);
   };
 
@@ -54,7 +54,7 @@ export function SidebarNav() {
   return (
     <Sidebar className="border-r">
       <SidebarHeader>
-        <Link href="/dashboard" className="flex items-center gap-2.5">
+        <Link href={isTeacherView ? "/teacher/dashboard" : "/dashboard"} className="flex items-center gap-2.5">
           <Logo className="w-9 h-9 text-sidebar-primary" />
           <div className="flex flex-col">
           <span className="text-lg font-headline font-semibold text-sidebar-primary">
@@ -92,7 +92,7 @@ export function SidebarNav() {
             </Avatar>
             <div className="flex-1 overflow-hidden">
                 <p className="text-sm font-semibold truncate text-sidebar-accent-foreground">{isTeacherView ? 'Educator' : 'Alex Green'}</p>
-                <p className="text-xs text-sidebar-accent-foreground/70 truncate">{isTeacherView ? 'Teacher' : 'Eco-Guardian'}</p>
+                <p className="text-xs text-sidebar-accent-foreground/70 truncate">{isTeacherView ? 'teacher@greenleap.edu' : 'alex.green@greenleap.edu'}</p>
             </div>
             <Button variant="ghost" size="icon" className="shrink-0 text-sidebar-accent-foreground/70 hover:text-sidebar-accent-foreground hover:bg-sidebar-accent" onClick={handleLogout}>
                 <LogOut className="w-5 h-5"/>
