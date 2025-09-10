@@ -28,7 +28,7 @@ export default function TeacherDashboardPage() {
     }
   }, [user, userData, loading, router]);
 
-  if (loading || !userData) {
+  if (loading || !userData || userData.role !== 'teacher') {
     return (
         <div className="flex items-center justify-center min-h-screen">
           <div className="p-8 bg-white rounded-lg shadow-lg">

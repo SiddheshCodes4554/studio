@@ -6,22 +6,25 @@ import { onAuthStateChanged, User, createUserWithEmailAndPassword, signInWithEma
 import { auth, db } from '@/lib/firebase';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 
-interface StudentData {
+interface UserData {
     name: string;
     email: string;
-    college: string;
-    rollNo: string;
-    dob: string;
-    abcId: string;
-    role?: 'student' | 'teacher';
+    role: 'student' | 'teacher';
+    // Student specific
+    college?: string;
+    rollNo?: string;
+    dob?: string;
+    abcId?: string;
+    // Teacher specific
+    school?: string;
 }
 
 interface AuthContextType {
   user: User | null;
-  userData: StudentData | null;
+  userData: UserData | null;
   loading: boolean;
   login: (email: string, pass: string) => Promise<any>;
-  signup: (email: string, pass: string, studentData: Omit<StudentData, 'role'>) => Promise<any>;
+  signup: (email: string, pass: string, studentData: Omit<UserData, 'role' | 'school'>) => Promise<any>;
   logout: () => Promise<any>;
 }
 
@@ -29,16 +32,17 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [userData, setUserData] = useState<StudentData | null>(null);
+  const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      setLoading(true);
       if (user) {
         setUser(user);
         const userDoc = await getDoc(doc(db, 'users', user.uid));
         if(userDoc.exists()) {
-            setUserData(userDoc.data() as StudentData);
+            setUserData(userDoc.data() as UserData);
         }
       } else {
         setUser(null);
@@ -54,17 +58,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return signInWithEmailAndPassword(auth, email, pass);
   };
 
-  const signup = async (email: string, pass: string, studentData: Omit<StudentData, 'role'>) => {
+  const signup = async (email: string, pass: string, studentData: Omit<UserData, 'role' | 'school'>) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
     const { user } = userCredential;
 
-    // Create user document in Firestore
     const userDocRef = doc(db, 'users', user.uid);
-    await setDoc(userDocRef, {
+    const fullUserData: UserData = {
         uid: user.uid,
         ...studentData,
         role: 'student'
-    });
+    }
+    await setDoc(userDocRef, fullUserData);
+    setUserData(fullUserData);
     return userCredential;
   };
 

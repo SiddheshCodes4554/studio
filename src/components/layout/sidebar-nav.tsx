@@ -34,6 +34,7 @@ export function SidebarNav() {
   const { user, userData, logout } = useAuth();
   const { toast } = useToast();
 
+  const isTeacherView = userData?.role === 'teacher';
 
   const handleLogout = async () => {
     try {
@@ -45,8 +46,6 @@ export function SidebarNav() {
         toast({ variant: 'destructive', title: 'Logout Failed', description: error.message });
     }
   };
-
-  const isTeacherView = pathname.startsWith('/teacher');
 
   const menuItems = [
     { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -61,6 +60,11 @@ export function SidebarNav() {
   ];
 
   const itemsToRender = isTeacherView ? teacherMenuItems : menuItems;
+
+  // Don't render sidebar on login/signup pages
+  if (!user) {
+    return null;
+  }
 
   return (
     <Sidebar className="border-r">
@@ -98,11 +102,11 @@ export function SidebarNav() {
       <SidebarFooter>
          <div className="flex items-center gap-3 p-2 rounded-lg bg-sidebar-accent">
             <Avatar className="h-10 w-10 border-2 border-sidebar-border">
-              <AvatarImage src={isTeacherView ? "https://i.pravatar.cc/150?u=teacher" : "https://i.pravatar.cc/150?u=a042581f4e29026704a"} alt="User" />
+              <AvatarImage src={isTeacherView ? "https://i.pravatar.cc/150?u=teacher" : `https://i.pravatar.cc/150?u=${user.uid}`} alt="User" />
               <AvatarFallback>{userData?.name?.charAt(0) || user?.email?.charAt(0).toUpperCase()}</AvatarFallback>
             </Avatar>
             <div className="flex-1 overflow-hidden">
-                <p className="text-sm font-semibold truncate text-sidebar-accent-foreground">{isTeacherView ? 'Educator' : userData?.name}</p>
+                <p className="text-sm font-semibold truncate text-sidebar-accent-foreground">{userData?.name || (isTeacherView ? 'Educator' : 'Student')}</p>
                 <p className="text-xs text-sidebar-accent-foreground/70 truncate">{user?.email}</p>
             </div>
             <Button variant="ghost" size="icon" className="shrink-0 text-sidebar-accent-foreground/70 hover:text-sidebar-accent-foreground hover:bg-sidebar-accent" onClick={handleLogout}>

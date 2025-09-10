@@ -19,12 +19,16 @@ export default function DashboardPage() {
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading && !user) {
-      router.push('/');
+    if (!loading) {
+      if (!user) {
+        router.push('/');
+      } else if (userData?.role === 'teacher') {
+        router.push('/teacher/dashboard');
+      }
     }
-  }, [user, loading, router]);
+  }, [user, userData, loading, router]);
   
-  if (loading || !userData) {
+  if (loading || !userData || userData.role !== 'student') {
     return (
         <div className="flex items-center justify-center min-h-screen">
           <div className="p-8 bg-white rounded-lg shadow-lg">

@@ -8,21 +8,28 @@ import { Label } from '@/components/ui/label';
 import { Logo } from '@/components/icons/logo';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/use-auth';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 
 export default function LoginPage() {
   const router = useRouter();
-  const { login } = useAuth();
+  const { login, user, loading } = useAuth();
   const { toast } = useToast();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (!loading && user) {
+      router.push('/dashboard');
+    }
+  }, [user, loading, router]);
+
 
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    setIsSubmitting(true);
     try {
       await login(email, password);
       toast({ title: 'Success', description: 'Logged in successfully!' });
@@ -34,9 +41,25 @@ export default function LoginPage() {
         description: error.message,
       });
     } finally {
-      setLoading(false);
+      setIsSubmitting(false);
     }
   };
+
+  if (loading) {
+    return (
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="p-8 bg-white rounded-lg shadow-lg">
+            <p className="text-2xl font-bold text-primary">Loading...</p>
+          </div>
+        </div>
+    );
+  }
+
+  // If user is logged in, this will be null while redirecting
+  if (user) {
+    return null;
+  }
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-grid p-4">
@@ -60,8 +83,8 @@ export default function LoginPage() {
               <Label htmlFor="password">Password</Label>
               <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
             </div>
-            <Button type="submit" className="w-full" size="lg" disabled={loading}>
-              {loading ? 'Logging in...' : 'Login as Student'}
+            <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
+              {isSubmitting ? 'Logging in...' : 'Login as Student'}
             </Button>
             <div className="text-center text-sm text-muted-foreground">
                 <p>Don't have an account? <Link href="/signup" className="font-semibold text-primary hover:underline">Sign up here</Link></p>
