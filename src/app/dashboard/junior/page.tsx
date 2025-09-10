@@ -1,7 +1,6 @@
 
 'use client';
 
-import { ActionCard } from '@/components/dashboard/action-card';
 import { CurrentQuest } from '@/components/dashboard/current-quest';
 import { Header } from '@/components/layout/header';
 import { SidebarNav } from '@/components/layout/sidebar-nav';
@@ -55,7 +54,7 @@ export default function JuniorDashboardPage() {
           <CurrentQuest />
 
           <div className="grid gap-6 md:grid-cols-3">
-             <Card className="bg-yellow-400/20 border-yellow-500/50">
+             <Card className="bg-yellow-400/20 border-yellow-500/50 hover:shadow-lg hover:-translate-y-1 transition-all">
                 <CardHeader>
                     <div className="flex items-center gap-3">
                         <BrainCircuit className="w-8 h-8 text-yellow-600"/>
@@ -66,7 +65,7 @@ export default function JuniorDashboardPage() {
                     <p className="text-yellow-800">Did you know? A single tree can absorb up to 48 pounds of carbon dioxide per year!</p>
                 </CardContent>
             </Card>
-             <Card className="bg-blue-400/20 border-blue-500/50">
+             <Card className="bg-blue-400/20 border-blue-500/50 hover:shadow-lg hover:-translate-y-1 transition-all">
                 <CardHeader>
                     <div className="flex items-center gap-3">
                         <Gamepad2 className="w-8 h-8 text-blue-600"/>
@@ -75,12 +74,12 @@ export default function JuniorDashboardPage() {
                 </CardHeader>
                 <CardContent>
                     <p className="text-blue-800">Check out the 'Waste Sorting Challenge' in the learning section to test your skills!</p>
-                     <Link href="/learn/waste-management">
-                        <button className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg">Play Now</button>
+                     <Link href="/learn/waste-management" passHref>
+                        <button className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">Play Now</button>
                     </Link>
                 </CardContent>
             </Card>
-            <Card className="bg-red-400/20 border-red-500/50">
+            <Card className="bg-red-400/20 border-red-500/50 hover:shadow-lg hover:-translate-y-1 transition-all">
                 <CardHeader>
                     <div className="flex items-center gap-3">
                         <Rocket className="w-8 h-8 text-red-600"/>
@@ -89,8 +88,8 @@ export default function JuniorDashboardPage() {
                 </CardHeader>
                 <CardContent>
                     <p className="text-red-800">Start the 'DIY Compost Bin' challenge and turn your food scraps into garden gold!</p>
-                    <Link href="/challenges/diy-compost-bin">
-                        <button className="mt-2 px-4 py-2 bg-red-600 text-white rounded-lg">Start Mission</button>
+                    <Link href="/challenges/diy-compost-bin" passHref>
+                        <button className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">Start Mission</button>
                     </Link>
                 </CardContent>
             </Card>
