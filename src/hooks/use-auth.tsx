@@ -49,14 +49,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         if(userDoc.exists()) {
             const fetchedUserData = userDoc.data() as UserData;
             setUserData(fetchedUserData);
-            // Redirect after user data is fetched
-            if (fetchedUserData.role === 'teacher') {
-                router.push('/teacher/dashboard');
-            } else if (fetchedUserData.age && fetchedUserData.age < 17) {
-                router.push('/dashboard/junior');
-            } else {
-                router.push('/dashboard');
-            }
         }
       } else {
         setUser(null);
@@ -67,6 +59,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     return () => unsubscribe();
   }, [router]);
+
+  useEffect(() => {
+    if (!loading && user && userData) {
+      if (userData.role === 'teacher') {
+        router.push('/teacher/dashboard');
+      } else if (userData.age && userData.age < 17) {
+        router.push('/dashboard/junior');
+      } else {
+        router.push('/dashboard');
+      }
+    }
+  }, [user, userData, loading, router]);
+
 
   const login = (email: string, pass: string) => {
     return signInWithEmailAndPassword(auth, email, pass);

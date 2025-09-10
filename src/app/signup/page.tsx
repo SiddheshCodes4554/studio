@@ -11,11 +11,6 @@ import { useAuth } from '@/hooks/use-auth';
 import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { CalendarIcon } from 'lucide-react';
-import { format, getYear, subYears } from 'date-fns';
-import { cn } from '@/lib/utils';
 
 export default function SignupPage() {
   const router = useRouter();
@@ -28,7 +23,7 @@ export default function SignupPage() {
   const [password, setPassword] = useState('');
   const [college, setCollege] = useState('');
   const [rollNo, setRollNo] = useState('');
-  const [dob, setDob] = useState<Date | undefined>();
+  const [dob, setDob] = useState('');
   const [abcId, setAbcId] = useState('');
 
   const handleSignup = async (e: FormEvent) => {
@@ -37,13 +32,13 @@ export default function SignupPage() {
       toast({
         variant: 'destructive',
         title: 'Signup Failed',
-        description: 'Please select your date of birth.',
+        description: 'Please enter your date of birth.',
       });
       return;
     }
     setLoading(true);
     try {
-      const studentData = { name, email, college, rollNo, dob: dob.toISOString(), abcId };
+      const studentData = { name, email, college, rollNo, dob, abcId };
       await signup(email, password, studentData);
       toast({ title: 'Success', description: 'Account created successfully!' });
       // The redirect is now handled by the useAuth hook based on age.
@@ -100,31 +95,7 @@ export default function SignupPage() {
             </div>
              <div className="space-y-1 flex flex-col">
                 <Label htmlFor="dob">Date of Birth</Label>
-                 <Popover>
-                    <PopoverTrigger asChild>
-                        <Button
-                        variant={"outline"}
-                        className={cn(
-                            "w-full justify-start text-left font-normal",
-                            !dob && "text-muted-foreground"
-                        )}
-                        >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {dob ? format(dob, "PPP") : <span>Pick a date</span>}
-                        </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
-                        <Calendar
-                        mode="single"
-                        selected={dob}
-                        onSelect={setDob}
-                        captionLayout="dropdown-nav"
-                        fromYear={getYear(subYears(new Date(), 100))}
-                        toYear={getYear(new Date())}
-                        initialFocus
-                        />
-                    </PopoverContent>
-                </Popover>
+                <Input id="dob" type="date" required value={dob} onChange={(e) => setDob(e.target.value)} />
             </div>
             <Button type="submit" className="w-full" size="lg" disabled={loading}>
               {loading ? 'Creating Account...' : 'Sign Up'}
@@ -138,4 +109,3 @@ export default function SignupPage() {
     </div>
   );
 }
-
