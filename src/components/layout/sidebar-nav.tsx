@@ -25,14 +25,25 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
+import { useAuth } from "@/hooks/use-auth";
+import { useToast } from "@/hooks/use-toast";
 
 export function SidebarNav() {
   const pathname = usePathname();
   const router = useRouter();
+  const { user, userData, logout } = useAuth();
+  const { toast } = useToast();
 
-  const handleLogout = () => {
-    const target = isTeacherView ? '/teacher/login' : '/';
-    router.push(target);
+
+  const handleLogout = async () => {
+    try {
+        await logout();
+        const target = isTeacherView ? '/teacher/login' : '/';
+        router.push(target);
+        toast({ title: 'Success', description: 'Logged out successfully!' });
+    } catch (error: any) {
+        toast({ variant: 'destructive', title: 'Logout Failed', description: error.message });
+    }
   };
 
   const isTeacherView = pathname.startsWith('/teacher');
@@ -88,11 +99,11 @@ export function SidebarNav() {
          <div className="flex items-center gap-3 p-2 rounded-lg bg-sidebar-accent">
             <Avatar className="h-10 w-10 border-2 border-sidebar-border">
               <AvatarImage src={isTeacherView ? "https://i.pravatar.cc/150?u=teacher" : "https://i.pravatar.cc/150?u=a042581f4e29026704a"} alt="User" />
-              <AvatarFallback>{isTeacherView ? 'T' : 'AG'}</AvatarFallback>
+              <AvatarFallback>{userData?.name?.charAt(0) || user?.email?.charAt(0).toUpperCase()}</AvatarFallback>
             </Avatar>
             <div className="flex-1 overflow-hidden">
-                <p className="text-sm font-semibold truncate text-sidebar-accent-foreground">{isTeacherView ? 'Educator' : 'Alex Green'}</p>
-                <p className="text-xs text-sidebar-accent-foreground/70 truncate">{isTeacherView ? 'teacher@greenleap.edu' : 'alex.green@greenleap.edu'}</p>
+                <p className="text-sm font-semibold truncate text-sidebar-accent-foreground">{isTeacherView ? 'Educator' : userData?.name}</p>
+                <p className="text-xs text-sidebar-accent-foreground/70 truncate">{user?.email}</p>
             </div>
             <Button variant="ghost" size="icon" className="shrink-0 text-sidebar-accent-foreground/70 hover:text-sidebar-accent-foreground hover:bg-sidebar-accent" onClick={handleLogout}>
                 <LogOut className="w-5 h-5"/>

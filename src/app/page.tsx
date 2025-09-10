@@ -6,16 +6,36 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Logo } from '@/components/icons/logo';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useAuth } from '@/hooks/use-auth';
+import { FormEvent, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast';
 
 export default function LoginPage() {
   const router = useRouter();
+  const { login } = useAuth();
+  const { toast } = useToast();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = () => {
-    // In a real app, you'd have authentication logic here.
-    // For this prototype, we'll just navigate to the dashboard.
-    router.push('/dashboard');
+  const handleLogin = async (e: FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      await login(email, password);
+      toast({ title: 'Success', description: 'Logged in successfully!' });
+      router.push('/dashboard');
+    } catch (error: any) {
+      toast({
+        variant: 'destructive',
+        title: 'Login Failed',
+        description: error.message,
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -31,19 +51,22 @@ export default function LoginPage() {
           <CardDescription className="text-lg">Welcome to GreenLeap</CardDescription>
         </CardHeader>
         <CardContent>
-          <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
+          <form className="space-y-6" onSubmit={handleLogin}>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="student@greenleap.edu" required />
+              <Input id="email" type="email" placeholder="student@greenleap.edu" required value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" required />
+              <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
             </div>
-            <Button type="submit" className="w-full" size="lg">
-              Login as Student
+            <Button type="submit" className="w-full" size="lg" disabled={loading}>
+              {loading ? 'Logging in...' : 'Login as Student'}
             </Button>
             <div className="text-center text-sm text-muted-foreground">
+                <p>Don't have an account? <Link href="/signup" className="font-semibold text-primary hover:underline">Sign up here</Link></p>
+            </div>
+             <div className="text-center text-sm text-muted-foreground pt-4">
                 <p>Are you a teacher? <Link href="/teacher/login" className="font-semibold text-primary hover:underline">Login here</Link></p>
             </div>
           </form>

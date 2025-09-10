@@ -1,3 +1,6 @@
+
+'use client';
+
 import { Header } from '@/components/layout/header';
 import { SidebarNav } from '@/components/layout/sidebar-nav';
 import { ClassOverview } from '@/components/teacher/class-overview';
@@ -6,9 +9,36 @@ import { MissionAssignment } from '@/components/teacher/mission-assignment';
 import { StudentProgressTracker } from '@/components/teacher/student-progress-tracker';
 import { Button } from '@/components/ui/button';
 import { SidebarProvider } from '@/components/ui/sidebar';
+import { useAuth } from '@/hooks/use-auth';
 import { Download, GraduationCap } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function TeacherDashboardPage() {
+  const { user, userData, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading) {
+      if (!user) {
+        router.push('/teacher/login');
+      } else if (userData?.role === 'student') {
+        router.push('/dashboard');
+      }
+    }
+  }, [user, userData, loading, router]);
+
+  if (loading || !userData) {
+    return (
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="p-8 bg-white rounded-lg shadow-lg">
+            <p className="text-2xl font-bold text-primary">Loading your dashboard...</p>
+          </div>
+        </div>
+    );
+  }
+
+
   return (
     <SidebarProvider>
       <SidebarNav />
