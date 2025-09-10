@@ -13,21 +13,16 @@ import Link from 'next/link';
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { Skeleton } from '@/components/ui/skeleton';
 
 export default function DashboardPage() {
   const { user, userData, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading) {
-      if (!user) {
-        router.push('/');
-      } else if (userData?.role === 'teacher') {
-        router.push('/teacher/dashboard');
-      }
+    if (!loading && !user) {
+      router.push('/');
     }
-  }, [user, userData, loading, router]);
+  }, [user, loading, router]);
   
   if (loading || !userData) {
     return (
