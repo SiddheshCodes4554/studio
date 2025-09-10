@@ -14,7 +14,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { CalendarIcon } from 'lucide-react';
-import { format } from 'date-fns';
+import { format, getYear, subYears } from 'date-fns';
 import { cn } from '@/lib/utils';
 
 export default function SignupPage() {
@@ -46,7 +46,7 @@ export default function SignupPage() {
       const studentData = { name, email, college, rollNo, dob: dob.toISOString(), abcId };
       await signup(email, password, studentData);
       toast({ title: 'Success', description: 'Account created successfully!' });
-      router.push('/dashboard');
+      // The redirect is now handled by the useAuth hook based on age.
     } catch (error: any) {
       toast({
         variant: 'destructive',
@@ -118,6 +118,9 @@ export default function SignupPage() {
                         mode="single"
                         selected={dob}
                         onSelect={setDob}
+                        captionLayout="dropdown-nav"
+                        fromYear={getYear(subYears(new Date(), 100))}
+                        toYear={getYear(new Date())}
                         initialFocus
                         />
                     </PopoverContent>

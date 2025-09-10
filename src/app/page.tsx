@@ -14,17 +14,23 @@ import { useToast } from '@/hooks/use-toast';
 
 export default function LoginPage() {
   const router = useRouter();
-  const { login, user, loading } = useAuth();
+  const { login, user, userData, loading } = useAuth();
   const { toast } = useToast();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    if (!loading && user) {
-      router.push('/dashboard');
+    if (!loading && user && userData) {
+      if (userData.role === 'teacher') {
+        router.push('/teacher/dashboard');
+      } else if (userData.age && userData.age < 17) {
+        router.push('/dashboard/junior');
+      } else {
+        router.push('/dashboard');
+      }
     }
-  }, [user, loading, router]);
+  }, [user, userData, loading, router]);
 
 
   const handleLogin = async (e: FormEvent) => {
@@ -33,7 +39,7 @@ export default function LoginPage() {
     try {
       await login(email, password);
       toast({ title: 'Success', description: 'Logged in successfully!' });
-      router.push('/dashboard');
+      // Redirect is now handled by the useEffect and useAuth hook
     } catch (error: any) {
       toast({
         variant: 'destructive',
@@ -45,21 +51,15 @@ export default function LoginPage() {
     }
   };
 
-  if (loading) {
+  if (loading || user) {
     return (
         <div className="flex items-center justify-center min-h-screen">
-          <div className="p-8 bg-white rounded-lg shadow-lg">
+          <div className="p-8 bg-background rounded-lg shadow-lg">
             <p className="text-2xl font-bold text-primary">Loading...</p>
           </div>
         </div>
     );
   }
-
-  // If user is logged in, this will be null while redirecting
-  if (user) {
-    return null;
-  }
-
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-grid p-4">

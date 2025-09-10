@@ -5,11 +5,15 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { onAuthStateChanged, User, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { auth, db } from '@/lib/firebase';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { useRouter } from 'next/navigation';
+import { differenceInYears } from 'date-fns';
 
 interface UserData {
+    uid: string;
     name: string;
     email: string;
     role: 'student' | 'teacher';
+    age?: number;
     // Student specific
     college?: string;
     rollNo?: string;
@@ -24,7 +28,7 @@ interface AuthContextType {
   userData: UserData | null;
   loading: boolean;
   login: (email: string, pass: string) => Promise<any>;
-  signup: (email: string, pass: string, studentData: Omit<UserData, 'role' | 'school'>) => Promise<any>;
+  signup: (email: string, pass: string, studentData: Omit<UserData, 'role' | 'school' | 'uid' | 'age'>) => Promise<any>;
   logout: () => Promise<any>;
 }
 
@@ -34,6 +38,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -42,7 +47,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(user);
         const userDoc = await getDoc(doc(db, 'users', user.uid));
         if(userDoc.exists()) {
-            setUserData(userDoc.data() as UserData);
+            const fetchedUserData = userDoc.data() as UserData;
+            setUserData(fetchedUserData);
+            // Redirect after user data is fetched
+            if (fetchedUserData.role === 'teacher') {
+                router.push('/teacher/dashboard');
+            } else if (fetchedUserData.age && fetchedUserData.age < 17) {
+                router.push('/dashboard/junior');
+            } else {
+                router.push('/dashboard');
+            }
         }
       } else {
         setUser(null);
@@ -52,20 +66,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [router]);
 
   const login = (email: string, pass: string) => {
     return signInWithEmailAndPassword(auth, email, pass);
   };
 
-  const signup = async (email: string, pass: string, studentData: Omit<UserData, 'role' | 'school'>) => {
+  const signup = async (email: string, pass:string, studentData: Omit<UserData, 'role' | 'school' | 'uid' | 'age'>) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
     const { user } = userCredential;
+    
+    const age = differenceInYears(new Date(), new Date(studentData.dob!));
 
     const userDocRef = doc(db, 'users', user.uid);
     const fullUserData: UserData = {
         uid: user.uid,
         ...studentData,
+        age,
         role: 'student'
     }
     await setDoc(userDocRef, fullUserData);

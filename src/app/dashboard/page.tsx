@@ -24,14 +24,16 @@ export default function DashboardPage() {
         router.push('/');
       } else if (userData?.role === 'teacher') {
         router.push('/teacher/dashboard');
+      } else if (userData?.age && userData.age < 17) {
+        router.push('/dashboard/junior');
       }
     }
   }, [user, userData, loading, router]);
   
-  if (loading || !userData || userData.role !== 'student') {
+  if (loading || !userData || userData.role !== 'student' || (userData.age && userData.age < 17)) {
     return (
         <div className="flex items-center justify-center min-h-screen">
-          <div className="p-8 bg-white rounded-lg shadow-lg">
+          <div className="p-8 bg-background rounded-lg shadow-lg">
             <p className="text-2xl font-bold text-primary">Loading your dashboard...</p>
           </div>
         </div>
